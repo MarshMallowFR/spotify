@@ -67,7 +67,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import { api } from "@/utils/api";
-import { formatArtistData, Artist } from "@/views/Showcase.service";
+import { formatArtistData } from "@/views/showcase/Showcase.service";
+import { Artist } from "@/views/showcase/Showcase.type";
 
 type EmptyObject = {
   [K in string]: never;

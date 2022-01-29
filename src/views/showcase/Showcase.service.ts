@@ -1,35 +1,11 @@
 import { AxiosResponse } from "axios";
-import { millisToMinutesAndSeconds } from "@/utils/tools";
-
-export type Artist = {
-  id: string;
-  name: string;
-  picture: string;
-  followers: number;
-  topTracks: Track[];
-  albums: Album[];
-  relatedArtists: RelatedArtist[];
-};
-
-export type Track = {
-  id: string;
-  title: string;
-  image: string;
-  duration: string;
-};
-
-type Album = {
-  id: string;
-  title: string;
-  image: string;
-  releaseDate: string;
-};
-
-type RelatedArtist = {
-  id: string;
-  name: string;
-  image: string;
-};
+import {
+  Artist,
+  Track,
+  Album,
+  RelatedArtist,
+} from "@/views/showcase/Showcase.type";
+import { millisToMinutesAndSeconds, numberWithCommas } from "@/utils/tools";
 
 export const formatArtistData = (data: AxiosResponse[]): Artist => {
   const [artist, tracks, albums, relatedArtists] = data.map(({ data }) => data);
@@ -37,7 +13,7 @@ export const formatArtistData = (data: AxiosResponse[]): Artist => {
     id: artist.id,
     name: artist.name,
     picture: artist.images[0]?.url,
-    followers: artist.followers.total,
+    followers: numberWithCommas(artist.followers.total),
     topTracks: formatTracks(tracks.tracks).slice(0, 5),
     albums: formatAlbums(albums.items),
     relatedArtists: formatRelatedArtist(relatedArtists.artists),
@@ -52,6 +28,7 @@ const formatTracks = (tracks: any[]): Track[] => {
     duration: millisToMinutesAndSeconds(track.duration_ms),
   }));
 };
+
 const formatAlbums = (albums: any[]): Album[] => {
   return albums.reduce((acc, currAlbum) => {
     const isDouble = acc.find(

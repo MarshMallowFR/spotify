@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import Showcase from "../views/Showcase.vue";
+import Showcase from "@/views/showcase/Showcase.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
