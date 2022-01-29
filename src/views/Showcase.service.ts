@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
+import { millisToMinutesAndSeconds } from "@/utils/tools";
 
-type Artist = {
+export type Artist = {
   id: string;
   name: string;
   picture: string;
@@ -10,11 +11,11 @@ type Artist = {
   relatedArtists: RelatedArtist[];
 };
 
-type Track = {
+export type Track = {
   id: string;
   title: string;
   image: string;
-  duration: number;
+  duration: string;
 };
 
 type Album = {
@@ -37,7 +38,7 @@ export const formatArtistData = (data: AxiosResponse[]): Artist => {
     name: artist.name,
     picture: artist.images[0]?.url,
     followers: artist.followers.total,
-    topTracks: formatTracks(tracks.tracks),
+    topTracks: formatTracks(tracks.tracks).slice(0, 5),
     albums: formatAlbums(albums.items),
     relatedArtists: formatRelatedArtist(relatedArtists.artists),
   };
@@ -48,16 +49,26 @@ const formatTracks = (tracks: any[]): Track[] => {
     id: track.id,
     title: track.name,
     image: track.album.images[0].url,
-    duration: track.duration,
+    duration: millisToMinutesAndSeconds(track.duration_ms),
   }));
 };
 const formatAlbums = (albums: any[]): Album[] => {
-  return albums.map((album: any) => ({
-    id: album.id,
-    title: album.name,
-    image: album.images[0].url,
-    releaseDate: album.release_date,
-  }));
+  return albums.reduce((acc, currAlbum) => {
+    const isDouble = acc.find(
+      ({ title }: { title: string }) =>
+        title.toLowerCase() === currAlbum.name.toLowerCase()
+    );
+    if (isDouble) {
+      return acc;
+    }
+    const formattedAlbum = {
+      id: currAlbum.id,
+      title: currAlbum.name,
+      image: currAlbum.images[0].url,
+      releaseDate: currAlbum.release_date,
+    };
+    return [...acc, formattedAlbum];
+  }, []);
 };
 const formatRelatedArtist = (relatedArtists: any[]): RelatedArtist[] => {
   return relatedArtists.map((artist: any) => ({

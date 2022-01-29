@@ -27,7 +27,6 @@
         <p class="showcase_track_title">{{ track.title }}</p>
         <p class="showcase_track_duration">{{ track.duration }}</p>
       </li>
-      <button>{{ showMoreTracks ? "See more" : "Show less" }}</button>
     </ul>
   </section>
   <section id="showcase_albums">
@@ -66,17 +65,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { api } from "@/utils/api";
-import { formatArtistData } from "@/views/Showcase.service";
+import { formatArtistData, Artist } from "@/views/Showcase.service";
+
+type EmptyObject = {
+  [K in string]: never;
+};
 
 export default defineComponent({
   name: "Showcase",
   setup() {
-    let artist = ref({});
+    let artist: Ref<Artist | EmptyObject> = ref({});
     // Id of Angus and Julia Stone
     const artistId = ref("4tvKz56Tr39bkhcQUTO0Xr");
-    const showMoreTracks = ref(false);
 
     onMounted(async () => {
       const artistData = await Promise.all([
@@ -91,9 +93,9 @@ export default defineComponent({
       ]);
       artist.value = formatArtistData(artistData);
     });
+
     return {
       artist,
-      showMoreTracks,
     };
   },
   // data() {
@@ -166,6 +168,9 @@ export default defineComponent({
       > * {
         margin-right: 32px;
         font-size: 1.25rem;
+      }
+      .showcase_track_title {
+        width: 500px;
       }
     }
     .showcase_track_cover {

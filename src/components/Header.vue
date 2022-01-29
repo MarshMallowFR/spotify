@@ -34,6 +34,7 @@ header {
       text-decoration: none;
       color: inherit;
       font-size: 1.2em;
+      margin-bottom: 32px;
     }
   }
 }
