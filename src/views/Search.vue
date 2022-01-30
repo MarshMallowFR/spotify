@@ -27,7 +27,6 @@ export default defineComponent({
   setup() {
     const artists: Ref<RelatedArtist[]> = ref([]);
     const searchArtist = async (artistName: string) => {
-      // const artists;
       const { data: artistsSearched } = await api(
         `https://api.spotify.com/v1/search?q=${artistName}&type=album,artist`
       );

@@ -19,7 +19,6 @@ export const getToken = async (): Promise<string> => {
     data: "grant_type=client_credentials",
   });
   const { access_token } = data.data;
-  token = access_token;
   return access_token;
 };
 

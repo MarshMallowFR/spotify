@@ -2,14 +2,14 @@
   <input type="text" v-model="artistName" :placeholder="placeholder" />
 </template>
 
-<script>
-import { defineComponent, ref, watch } from "vue";
+<script lang="ts">
+import { defineComponent, ref, watch, Ref } from "vue";
 export default defineComponent({
   props: {
     placeholder: String,
   },
   setup(_, context) {
-    const artistName = ref("");
+    const artistName: Ref<string> = ref("");
     watch(artistName, () => {
       context.emit("searchArtist", artistName.value);
     });

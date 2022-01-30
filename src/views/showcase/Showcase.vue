@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, _RouteLocationBase } from "vue-router";
 
 import ArtistsSummary from "@/components/ArtistsSummary.vue";
 import { formatArtistData } from "@/views/showcase/Showcase.service";
@@ -66,7 +66,7 @@ export default defineComponent({
   },
   setup() {
     let artist: Ref<Artist | EmptyObject> = ref({});
-    const route = useRoute();
+    const route: _RouteLocationBase = useRoute();
     // id of route or Angus and Julia Stone (my fav artists)
     const artistId = ref(route.params.id || "4tvKz56Tr39bkhcQUTO0Xr");
 
