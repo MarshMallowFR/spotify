@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-model.lazy="artistName" :placeholder="placeholder" />
+  <input type="text" v-model="artistName" :placeholder="placeholder" />
 </template>
 
 <script>
