@@ -1,5 +1,7 @@
 import axios, { AxiosRequestHeaders, AxiosResponse } from "axios";
 
+let token = "";
+
 export const getToken = async (): Promise<string> => {
   const url = "https://accounts.spotify.com/api/token";
   const data = await axios(url, {
@@ -16,15 +18,18 @@ export const getToken = async (): Promise<string> => {
     },
     data: "grant_type=client_credentials",
   });
-  const { access_token: token } = data.data;
-  return token;
+  const { access_token } = data.data;
+  token = access_token;
+  return access_token;
 };
 
 export const api = async (
   url: string,
   options: AxiosRequestHeaders = {}
 ): Promise<AxiosResponse> => {
-  const token = await getToken();
+  if (!token) {
+    token = await getToken();
+  }
   return axios(url, {
     headers: {
       Authorization: `Bearer ${token}`,

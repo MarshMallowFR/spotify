@@ -27,3 +27,29 @@ export type RelatedArtist = {
   name: string;
   image: string;
 };
+
+export type TrackDB = {
+  id: string;
+  name: string;
+  album: {
+    images: Image[];
+  };
+  duration_ms: number;
+};
+
+export type AlbumDB = {
+  id: string;
+  name: string;
+  images: Image[];
+  release_date: string;
+};
+
+export type RelatedArtistDB = {
+  id: string;
+  name: string;
+  images: Image[];
+};
+
+type Image = {
+  url: string;
+};

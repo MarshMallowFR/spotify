@@ -1,10 +1,13 @@
 <template>
-  <input type="text" v-model.lazy="artistName" />
+  <input type="text" v-model.lazy="artistName" :placeholder="placeholder" />
 </template>
 
 <script>
-import { ref, watch } from "vue";
-export default {
+import { defineComponent, ref, watch } from "vue";
+export default defineComponent({
+  props: {
+    placeholder: String,
+  },
   setup(_, context) {
     const artistName = ref("");
     watch(artistName, () => {
@@ -14,7 +17,13 @@ export default {
       artistName,
     };
   },
-};
+});
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+input {
+  height: 50px;
+  width: 50%;
+  padding: 16px;
+}
+</style>

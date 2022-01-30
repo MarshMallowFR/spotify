@@ -1,55 +1,50 @@
 <template>
   <div id="search">
-    <SearchInput @searchArtist="searchArtist" />
+    <SearchInput
+      :placeholder="'Search an artist'"
+      @searchArtist="searchArtist"
+    />
   </div>
+  <ArtistsSummary :artists="artists" :title="'Your research:'" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import { api } from "@/utils/api";
 
 import SearchInput from "@/components/SearchInput.vue";
+import ArtistsSummary from "@/components/ArtistsSummary.vue";
+
+import { formatRelatedArtist } from "@/views/showcase/Showcase.service";
+import { RelatedArtist } from "@/views/showcase/Showcase.type";
 
 export default defineComponent({
   name: "Search",
   components: {
     SearchInput,
+    ArtistsSummary,
   },
-  // data() {
-  //   return {
-  //     artistName: "",
-  //   };
-  // },
-  // mounted() {
-  //   // this.fetchTest();
-  // },
-  // watch: {
-  //   async artistName() {
-  //     if (this.artistName.length > 3) {
-  //       // const artist = await api(
-  //       //   `https://api.spotify.com/v1/search?q=${this.artistName}&type=album,artist`,
-  //       // );
-  //       const artist = await api(
-  //         "https://api.spotify.com/v1/artists/4tvKz56Tr39bkhcQUTO0Xr"
-  //       );
-
-  //       console.log(artist);
-  //     }
-  //   },
-  // },
-  // methods: {
-  //   async searchArtist(artistName: string) {
-  //     // api("https://api.spotify.com/v1/browse/new-releases");
-  //   },
-  // },
   setup() {
+    const artists: Ref<RelatedArtist[]> = ref([]);
     const searchArtist = async (artistName: string) => {
-      console.log(artistName);
-      return api("https://api.spotify.com/v1/artists/01fkQiYuBZt16vQ8iRIc7g");
+      // const artists;
+      const { data: artistsSearched } = await api(
+        `https://api.spotify.com/v1/search?q=${artistName}&type=album,artist`
+      );
+      artists.value = formatRelatedArtist(
+        artistsSearched.artists.items
+      ) as RelatedArtist[];
     };
     return {
       searchArtist,
+      artists,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+#search {
+  margin-bottom: 38px;
+}
+</style>

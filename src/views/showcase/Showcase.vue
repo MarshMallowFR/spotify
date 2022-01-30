@@ -45,88 +45,69 @@
       </li>
     </ul>
   </section>
-  <section id="showcase_recommandation">
-    <h3>Fans also like</h3>
-    <ul id="showcase_recommandation_list">
-      <li
-        class="showcase_recommanded"
-        v-for="relatedArtist in artist.relatedArtists"
-        :key="relatedArtist.id"
-      >
-        <img
-          class="showcase_recommanded_picture"
-          :src="relatedArtist.image"
-          alt="artist picture"
-        />
-        <p class="showcase_recommanded_name">{{ relatedArtist.name }}</p>
-      </li>
-    </ul>
-  </section>
+  <ArtistsSummary :artists="artist.relatedArtists" :title="'Fans also like'" />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, Ref, ref } from "vue";
-import { api } from "@/utils/api";
+import { defineComponent, onMounted, Ref, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+import ArtistsSummary from "@/components/ArtistsSummary.vue";
 import { formatArtistData } from "@/views/showcase/Showcase.service";
 import { Artist } from "@/views/showcase/Showcase.type";
 
-type EmptyObject = {
-  [K in string]: never;
-};
+import { api } from "@/utils/api";
+import { EmptyObject } from "@/utils/general.types";
 
 export default defineComponent({
   name: "Showcase",
+  components: {
+    ArtistsSummary,
+  },
   setup() {
     let artist: Ref<Artist | EmptyObject> = ref({});
-    // Id of Angus and Julia Stone
-    const artistId = ref("4tvKz56Tr39bkhcQUTO0Xr");
+    const route = useRoute();
+    // id of route or Angus and Julia Stone (my fav artists)
+    const artistId = ref(route.params.id || "4tvKz56Tr39bkhcQUTO0Xr");
 
-    onMounted(async () => {
+    const fetchArtist = async (newArtistId?: string) => {
       const artistData = await Promise.all([
-        api(`https://api.spotify.com/v1/artists/${artistId.value}`),
         api(
-          `https://api.spotify.com/v1/artists/${artistId.value}/top-tracks?market=FR`
+          `https://api.spotify.com/v1/artists/${newArtistId || artistId.value}`
         ),
-        api(`https://api.spotify.com/v1/artists/${artistId.value}/albums`),
         api(
-          `https://api.spotify.com/v1/artists/${artistId.value}/related-artists`
+          `https://api.spotify.com/v1/artists/${
+            newArtistId || artistId.value
+          }/top-tracks?market=FR`
+        ),
+        api(
+          `https://api.spotify.com/v1/artists/${
+            newArtistId || artistId.value
+          }/albums`
+        ),
+        api(
+          `https://api.spotify.com/v1/artists/${
+            newArtistId || artistId.value
+          }/related-artists`
         ),
       ]);
       artist.value = formatArtistData(artistData);
+    };
+
+    onMounted(async () => {
+      fetchArtist();
+    });
+
+    watch(route, (newRoute) => {
+      if (newRoute.params.id) {
+        fetchArtist(newRoute.params.id as string);
+      }
     });
 
     return {
       artist,
     };
   },
-  // data() {
-  //   return {
-  //     artistName: "",
-  //   };
-  // },
-  // mounted() {
-  //   // this.fetchTest();
-  // },
-  // watch: {
-  //   async artistName() {
-  //     if (this.artistName.length > 3) {
-  //       // const artist = await api(
-  //       //   `https://api.spotify.com/v1/search?q=${this.artistName}&type=album,artist`,
-  //       // );
-  //       const artist = await api(
-  //         "https://api.spotify.com/v1/artists/4tvKz56Tr39bkhcQUTO0Xr"
-  //       );
-
-  //       console.log(artist);
-  //     }
-  //   },
-  // },
-  // methods: {
-  //   async fetchTest() {
-  //     // api("https://api.spotify.com/v1/browse/new-releases");
-  //     api("https://api.spotify.com/v1/artists/01fkQiYuBZt16vQ8iRIc7g");
-  //   },
-  // },
 });
 </script>
 
@@ -137,6 +118,7 @@ export default defineComponent({
 
   h3 {
     font-size: 2rem;
+    text-transform: uppercase;
   }
 
   #showcase_details {

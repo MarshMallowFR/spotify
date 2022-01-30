@@ -4,6 +4,9 @@ import {
   Track,
   Album,
   RelatedArtist,
+  AlbumDB,
+  RelatedArtistDB,
+  TrackDB,
 } from "@/views/showcase/Showcase.type";
 import { millisToMinutesAndSeconds, numberWithCommas } from "@/utils/tools";
 
@@ -20,8 +23,8 @@ export const formatArtistData = (data: AxiosResponse[]): Artist => {
   };
 };
 
-const formatTracks = (tracks: any[]): Track[] => {
-  return tracks.map((track: any) => ({
+const formatTracks = (tracks: TrackDB[]): Track[] => {
+  return tracks.map((track: TrackDB) => ({
     id: track.id,
     title: track.name,
     image: track.album.images[0].url,
@@ -29,8 +32,8 @@ const formatTracks = (tracks: any[]): Track[] => {
   }));
 };
 
-const formatAlbums = (albums: any[]): Album[] => {
-  return albums.reduce((acc, currAlbum) => {
+const formatAlbums = (albums: AlbumDB[]): Album[] => {
+  return albums.reduce((acc: Album[], currAlbum: AlbumDB) => {
     const isDouble = acc.find(
       ({ title }: { title: string }) =>
         title.toLowerCase() === currAlbum.name.toLowerCase()
@@ -47,10 +50,17 @@ const formatAlbums = (albums: any[]): Album[] => {
     return [...acc, formattedAlbum];
   }, []);
 };
-const formatRelatedArtist = (relatedArtists: any[]): RelatedArtist[] => {
-  return relatedArtists.map((artist: any) => ({
+
+export const formatRelatedArtist = (
+  relatedArtists: RelatedArtistDB[]
+): RelatedArtist[] => {
+  return relatedArtists.map((artist: RelatedArtistDB) => ({
     id: artist.id,
     name: artist.name,
-    image: artist.images[0].url,
+    image:
+      artist.images.length > 0
+        ? artist.images[0].url
+        : // unknown picture
+          "https://media.istockphoto.com/vectors/male-face-silhouette-or-icon-man-avatar-profile-unknown-or-anonymous-vector-id1087531642?k=20&m=1087531642&s=170667a&w=0&h=ge3fq1Dw0-J2FoW96c8klSiHyOnitVhReUUuIIYqtvw=",
   }));
 };
