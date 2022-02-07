@@ -1,22 +1,7 @@
-# interflora-test
-
-## FeedBack
-
-I decided to select the project with the Spotify API because I never worked on it and this is a product that I use every day :D
-I spend a few time to know how it's working but it's very cool to use.
-
-I didn't have a lot of time these last days, with the kids at home but here is my code.
-
-Comments:
-
-- I didn't want to use a state manager like vuex because the project is too small.
-- To be completely honest, I copy/paste the code of the modal because I didn't want to spend a lot of time with his style.
-- This is the first time I use the composition API. Really interesting even if I didn't use it very deeply.
-
-What I want to improve:
-
-- Add unit tests on search input and the actions of users (ex: click on artists cards)
-- If I'll have more time, I would like to improve my api function specially with the token. (ex: create a class and store the token on it at his first instance)
+# POC Vuejs3 / Composition API
+- Need credentials of Spotify to launch the project:
+  + VUE_APP_SPOTIFY_CLIENT_ID
+  + VUE_APP_SPOTIFY_CLIENT_SECRET
 
 ## Project setup
 
