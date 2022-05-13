@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
-import Modal from "@/components/Modal.vue";
+import { defineComponent } from 'vue';
+import Header from '@/components/Header.vue';
+import Modal from '@/components/Modal.vue';
 
 export default defineComponent({
   components: {
@@ -24,6 +24,7 @@ export default defineComponent({
   mounted() {
     setTimeout(() => {
       this.showModal = !this.showModal;
+      // TEST
     }, 25000);
   },
   methods: {
@@ -35,11 +36,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@/assets/style/main.scss";
+@import '@/assets/style/main.scss';
 #app {
   isolation: isolate;
   display: flex;
-  font-family: "Roboto";
+  font-family: 'Roboto';
   font-size: 16px;
   margin-top: 48px;
 }
